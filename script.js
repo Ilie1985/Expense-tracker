@@ -62,6 +62,8 @@ ${transaction.text} <span>${sign} ${Math.abs(
 // add total amount of income with reduce()
 //add toFixed method which will add two decimal places
 //get only the expense following the same steps as for the income
+// multiply it with -1 so that we can have a positive number
+//insert income expense and balance into the DOM with innerText
 
 const updateValues = () => {
   const amounts = transactions.map((transaction) => {
@@ -84,15 +86,20 @@ const updateValues = () => {
     .toFixed(2);
   // console.log(income);
 
-  const expense = amounts
-    .filter((item) => {
-      return item < 0;
-    })
-    .reduce((acc, item) => {
-      return (acc += item);
-    }, 0)
-    .toFixed(2);
+  const expense = (
+    amounts
+      .filter((item) => {
+        return item < 0;
+      })
+      .reduce((acc, item) => {
+        return (acc += item);
+      }, 0) * -1
+  ).toFixed(2);
   // console.log(expense);
+
+  balance.innerText = `$${total}`;
+  money_plus.innerText = `$${income}`;
+  money_minus.innerText = `$${expense}`;
 };
 //a=============================================================================
 
