@@ -8,6 +8,8 @@ const form = document.getElementById("form");
 const text = document.getElementById("text");
 const amount = document.getElementById("amount");
 
+const formTextAmount = "Please enter a valid value !";
+
 //===========================================================================
 
 // initialise a variable that stores the dummy transactions( an array of objects) untill the local storage is created
@@ -19,6 +21,64 @@ const dummyTransactions = [
 ];
 let transactions = dummyTransactions;
 //====================================================================
+
+// addTransaction FUNCTIONALITY
+
+//since this is a submit event ,pass the e parameter and call e.preventDefault so that it doesn`t actually submit
+//make sure there are no empty values by checking it and give a message
+//create an object called transaction , similar to what is in dummyTransactions with id text and amount
+// create a function that generates a random id for the transaction object
+// set text to text.value in the object
+//set amount to amount .value  in the object and convert it from  a string to a number by adding + sign
+// push the object to our array of objects (dummyTransactions/transactions)
+//add it to the DOM
+//update values in the DOM
+//clear the inputs
+
+const addTransaction = (e) => {
+  e.preventDefault();
+  if (text.value.trim() === "" || amount.value.trim() === "") {
+    (text.placeholder = `${formTextAmount}`),
+      (amount.placeholder = `${formTextAmount}`);
+  } else {
+    const transaction = {
+      id: generateID(),
+      text: text.value,
+      amount: +amount.value,
+    };
+    // console.log(transaction);
+    transactions.push(transaction);
+
+    addTransactionDOM(transaction);
+
+    updateValues();
+
+    text.value = "";
+    amount.value = "";
+  }
+};
+//=========================================================================
+
+// generateID FUNCTIONALITY
+//generate a randmo number with Math.floor(Math.random())
+
+const generateID = () => {
+  return Math.floor(Math.random() * 100000000);
+};
+
+//==================================================================
+
+//removeTransaction  BY ID FUNCTIONALITY
+// take transactions and filter ,for each transaction  call in a function and evaluate each ID and if its not equal to the id that`s passed in than its going to go in to the array
+//invoke init to update all the data on the page
+
+const removeTransaction = (id) => {
+  transactions = transactions.filter((transaction) => {
+    return transaction.id !== id;
+  });
+  init()
+};
+//==================================================================
 
 // addTransactionDOM FUNCTIONALITY
 
@@ -34,6 +94,9 @@ let transactions = dummyTransactions;
 //transaction.amount already has a sign ("-") in dummyTransactions , so to get rid of the sign  i need to wrap transaction.amount in a Math.abs method (math absolute) which will turn it into an absolute number it removes the negative sign
 //after the span put a delete button
 //add the element to the DOM --> list.appendChild(item)
+//add inline event listener on button
+//invoke the removeTransaction function
+
 const addTransactionDOM = (transaction) => {
   const sign = transaction.amount < 0 ? "-" : "+";
 
@@ -44,7 +107,9 @@ const addTransactionDOM = (transaction) => {
   item.innerHTML = `
 ${transaction.text} <span>${sign} ${Math.abs(
     transaction.amount
-  )} </span> <button class ="delete-btn">X</button>
+  )} </span> <button class ="delete-btn" onClick="removeTransaction(${
+    transaction.id
+  })">X</button>
 `;
   list.appendChild(item);
 };
@@ -116,3 +181,7 @@ const init = () => {
 };
 init();
 //==========================================================================
+
+//EVENT LISTENERS
+
+form.addEventListener("submit", addTransaction);
