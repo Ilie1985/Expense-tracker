@@ -32,6 +32,8 @@ let transactions = dummyTransactions;
 //add class based on value using ternary operator ,if the transaction.amount is less than 0 return class minus else return class plus
 // populate item element using innerHTML
 //transaction.amount already has a sign ("-") in dummyTransactions , so to get rid of the sign  i need to wrap transaction.amount in a Math.abs method (math absolute) which will turn it into an absolute number it removes the negative sign
+//after the span put a delete button
+//add the element to the DOM --> list.appendChild(item)
 const addTransactionDOM = (transaction) => {
   const sign = transaction.amount < 0 ? "-" : "+";
 
@@ -39,6 +41,20 @@ const addTransactionDOM = (transaction) => {
   item.classList.add(transaction.amount < 0 ? "minus" : "plus");
 
   item.innerHTML = `
-${transaction.text} <span>${sign} ${transaction.amount} </span>
+${transaction.text} <span>${sign} ${transaction.amount} </span> <button class ="delete-btn">X</button>
 `;
+  list.appendChild(item);
 };
+//=====================================================================
+
+//init FUNCTIONALITY
+
+//clear out the list
+// for each transaction invoke addTransactionDOM
+//call init function
+const init = () => {
+  list.innerHTML = "";
+
+  transactions.forEach(addTransactionDOM);
+};
+init();
