@@ -38,14 +38,63 @@ const addTransactionDOM = (transaction) => {
   const sign = transaction.amount < 0 ? "-" : "+";
 
   const item = document.createElement("li");
+
   item.classList.add(transaction.amount < 0 ? "minus" : "plus");
 
   item.innerHTML = `
-${transaction.text} <span>${sign} ${transaction.amount} </span> <button class ="delete-btn">X</button>
+${transaction.text} <span>${sign} ${Math.abs(
+    transaction.amount
+  )} </span> <button class ="delete-btn">X</button>
 `;
   list.appendChild(item);
 };
 //=====================================================================
+
+//updateValues FUNCTIONALITY
+
+//update the balance, income and expense
+//create a new array of just the amounts with .map() and save it in a variable called amounts
+//invoke the function updateValues inside the init function
+//total up the amounts with the reduce method
+//append the accumulator to item and start at 0
+//add toFixed method which will add two decimal places
+//get the income by creating a variable called income, with .filter method return only the item  greater than 0
+// add total amount of income with reduce()
+//add toFixed method which will add two decimal places
+//get only the expense following the same steps as for the income
+
+const updateValues = () => {
+  const amounts = transactions.map((transaction) => {
+    return transaction.amount;
+  });
+  const total = amounts
+    .reduce((acc, item) => {
+      return (acc += item);
+    }, 0)
+    .toFixed(2);
+  // console.log(total);
+  // console.log(amounts);
+  const income = amounts
+    .filter((item) => {
+      return item > 0;
+    })
+    .reduce((acc, item) => {
+      return (acc += item);
+    }, 0)
+    .toFixed(2);
+  // console.log(income);
+
+  const expense = amounts
+    .filter((item) => {
+      return item < 0;
+    })
+    .reduce((acc, item) => {
+      return (acc += item);
+    }, 0)
+    .toFixed(2);
+  // console.log(expense);
+};
+//a=============================================================================
 
 //init FUNCTIONALITY
 
@@ -56,5 +105,7 @@ const init = () => {
   list.innerHTML = "";
 
   transactions.forEach(addTransactionDOM);
+  updateValues();
 };
 init();
+//==========================================================================
