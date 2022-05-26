@@ -31,10 +31,10 @@ const formTextAmount = "Please enter a valid value !";
 //if its not = to null it means that its true so use localStorageTransactions
 //else set it to be an empty array
 
+const localStorageTransactions = JSON.parse(localStorage.getItem("transactions"));
 let transactions =
   localStorage.getItem("transactions") !== null ? localStorageTransactions : [];
 
-const localStorageTransactions = JSON.parse(localStorage.getItem(transactions));
 //=======================================================================
 
 // addTransaction FUNCTIONALITY
