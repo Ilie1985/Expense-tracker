@@ -12,15 +12,30 @@ const formTextAmount = "Please enter a valid value !";
 
 //===========================================================================
 
-// initialise a variable that stores the dummy transactions( an array of objects) untill the local storage is created
-const dummyTransactions = [
-  { id: 1, text: "Flower", amount: -20 },
-  { id: 2, text: "Salary", amount: 300 },
-  { id: 3, text: "Book", amount: -10 },
-  { id: 4, text: "Camera", amount: 150 },
-];
-let transactions = dummyTransactions;
+//DUMMY DATA BASE
+
+// //initialise a variable that stores the dummy transactions( an array of objects) untill the local storage is created
+// const dummyTransactions = [
+//   { id: 1, text: "Flower", amount: -20 },
+//   { id: 2, text: "Salary", amount: 300 },
+//   { id: 3, text: "Book", amount: -10 },
+//   { id: 4, text: "Camera", amount: 150 },
+// ];
+// let transactions = dummyTransactions;
 //====================================================================
+// CREATE LOCAL STORAGE
+
+//create a variable assign it to localStorage.getItem() and pass in transactions
+//its going to be a string array when we pull it out so we need to parse it with JSON.parse
+//check if it`s something in the local storage with ternary operator
+//if its not = to null it means that its true so use localStorageTransactions
+//else set it to be an empty array
+
+let transactions =
+  localStorage.getItem("transactions") !== null ? localStorageTransactions : [];
+
+const localStorageTransactions = JSON.parse(localStorage.getItem(transactions));
+//=======================================================================
 
 // addTransaction FUNCTIONALITY
 
@@ -53,6 +68,8 @@ const addTransaction = (e) => {
 
     updateValues();
 
+    updateLocalStorage();
+
     text.value = "";
     amount.value = "";
   }
@@ -60,7 +77,7 @@ const addTransaction = (e) => {
 //=========================================================================
 
 // generateID FUNCTIONALITY
-//generate a randmo number with Math.floor(Math.random())
+//generate a random number with Math.floor(Math.random())
 
 const generateID = () => {
   return Math.floor(Math.random() * 100000000);
@@ -69,6 +86,7 @@ const generateID = () => {
 //==================================================================
 
 //removeTransaction  BY ID FUNCTIONALITY
+
 // take transactions and filter ,for each transaction  call in a function and evaluate each ID and if its not equal to the id that`s passed in than its going to go in to the array
 //invoke init to update all the data on the page
 
@@ -76,7 +94,10 @@ const removeTransaction = (id) => {
   transactions = transactions.filter((transaction) => {
     return transaction.id !== id;
   });
-  init()
+
+  updateLocalStorage();
+
+  init();
 };
 //==================================================================
 
@@ -166,7 +187,18 @@ const updateValues = () => {
   money_plus.innerText = `$${income}`;
   money_minus.innerText = `$${expense}`;
 };
-//a=============================================================================
+//=============================================================================
+
+// updateLocalStorage FUNCTIONALITY
+
+//apply the setItem method on localStorage
+//takes in transactions
+//stringify what we get
+//invoke updateLocalstorange inside the addTransaction function
+const updateLocalStorage = () => {
+  localStorage.setItem("transactions", JSON.stringify(transactions));
+};
+//==================================================================
 
 //init FUNCTIONALITY
 
